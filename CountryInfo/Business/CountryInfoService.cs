@@ -19,7 +19,6 @@ namespace Business
         {
             _countryCodeValidator.Validate(countryCode);
             
-            //TODO: Remove .Result
             var country = _worldBankClient.GetCountryAsync(countryCode).Result;
             return country;
         }
