@@ -93,5 +93,41 @@ namespace Business.Tests
             Assert.Throws<InvalidCountryCodeException>(() => countryInfoService.GetCountryInfo(countryCode));
             _worldBankClientMock.Verify(x => x.GetCountryAsync(countryCode), Times.Never);
         }
+
+        [Test]
+        public void When_WorldBankClient_Fetches_No_Results_Then_Null_Is_Returned()
+        {
+            // Arrange
+            _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync((Country)null);
+
+            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
+
+            // Act
+            var result = countryInfoService.GetCountryInfo("BR");
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void When_WorldBankClient_Fetches_A_Valid_Result_Then_A_Valid_Country_Is_Returned()
+        {
+            // Arrange
+            var country = new Country
+            {
+                CountryName = "Brazil",
+            };
+
+            _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync(country);
+
+            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
+
+            // Act
+            var actualResult = countryInfoService.GetCountryInfo("BR");
+
+            // Assert
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(country.CountryName, actualResult.CountryName);
+        }
     }
 }
