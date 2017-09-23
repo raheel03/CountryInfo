@@ -1,0 +1,58 @@
+﻿@model CountryInfo.Models.CountrySearchModel
+
+<div>
+    <h3>Search Results</h3>
+    <hr />
+
+    @if (!string.IsNullOrWhiteSpace(Model.Query))
+    {
+        <div>
+            <dl class="dl-horizontal">
+                <dt><strong>Query</strong></dt>
+                <dd><strong>@Html.DisplayFor(m => m.Query)</strong></dd>
+            </dl>
+        </div>
+    }
+
+    @if (Model.HasErrors)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> @Model.ErrorMessage
+        </div>
+    }
+    else if (Model.Result == null)
+    {
+        <div class="alert alert-warning">
+            No results found.
+        </div>
+    }
+    else if (Model.Result != null)
+    {
+        <dl class="dl-horizontal">
+            <dt>Country Name</dt>
+            <dd>@Html.DisplayFor(m => m.Result.CountryName)</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Region</dt>
+            <dd>@Html.DisplayFor(m => m.Result.Region)</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Capital City</dt>
+            <dd>@Html.DisplayFor(m => m.Result.CapitalCity)</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Latitude</dt>
+            <dd>@Html.DisplayFor(m => m.Result.Latitude)</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Longitude</dt>
+            <dd>@Html.DisplayFor(m => m.Result.Longitude)</dd>
+        </dl>
+    }
+
+</div>
+
