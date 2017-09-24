@@ -57,11 +57,11 @@ namespace Business
 
                 country = new Country
                 {
-                    CountryName = countryToken.Value<string>("name"),
-                    Region = countryToken.Value<JObject>("region")?.Value<string>("value"),
-                    CapitalCity = countryToken.Value<string>("capitalCity"),
-                    Latitude = countryToken.Value<string>("latitude"),
-                    Longitude = countryToken.Value<string>("longitude")
+                    CountryName = countryToken.Value<string>(WorldBankApiConstants.CountryName),
+                    Region = countryToken.Value<JObject>(WorldBankApiConstants.Region)?.Value<string>(WorldBankApiConstants.Value),
+                    CapitalCity = countryToken.Value<string>(WorldBankApiConstants.CapitalCity),
+                    Latitude = countryToken.Value<string>(WorldBankApiConstants.Latitude),
+                    Longitude = countryToken.Value<string>(WorldBankApiConstants.Longitude)
                 };
             }
             catch

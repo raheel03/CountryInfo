@@ -54,6 +54,7 @@
     <Compile Include="Interface\ICountryCodeValidator.cs" />
     <Compile Include="Interface\ICountryInfoService.cs" />
     <Compile Include="Interface\IWorldBankClient.cs" />
+    <Compile Include="WorldBankApiConstants.cs" />
     <Compile Include="WorldBankClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

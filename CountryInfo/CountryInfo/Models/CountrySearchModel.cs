@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Business;
+﻿using Business;
 
 namespace CountryInfo.Models
 {
