@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Business.Exception;
+using Business.Interface;
 
 namespace Business
 {
-    public class CountryCodeValidator
+    public class CountryCodeValidator : ICountryCodeValidator
     {
         private const int MinCountryCodeLength = 2;
         private const int MaxCountryCodeLength = 3;

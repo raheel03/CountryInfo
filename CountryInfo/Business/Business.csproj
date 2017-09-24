@@ -51,6 +51,7 @@
     <Compile Include="Ensure.cs" />
     <Compile Include="CountryCodeValidator.cs" />
     <Compile Include="Exception\InvalidCountryCodeException.cs" />
+    <Compile Include="Interface\ICountryCodeValidator.cs" />
     <Compile Include="Interface\ICountryInfoService.cs" />
     <Compile Include="Interface\IWorldBankClient.cs" />
     <Compile Include="WorldBankClient.cs" />

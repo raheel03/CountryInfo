@@ -11,11 +11,16 @@ namespace Business.Tests
     public class CountryInfoServiceTests
     {
         private Mock<IWorldBankClient> _worldBankClientMock = new Mock<IWorldBankClient>();
+        private ICountryCodeValidator _countryCodeValidator;
+        private ICountryInfoService _countryInfoService;
 
         [SetUp]
         public void Setup()
         {
             _worldBankClientMock = new Mock<IWorldBankClient>();
+            _countryCodeValidator = new CountryCodeValidator();
+
+            _countryInfoService = new CountryInfoService(_countryCodeValidator, _worldBankClientMock.Object);
         }
 
         [Test]
@@ -24,11 +29,12 @@ namespace Business.Tests
             // Arrange
 
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => new CountryInfoService(null));
-
+            var ex1 = Assert.Throws<ArgumentNullException>(() => new CountryInfoService(_countryCodeValidator, null));
+            var ex2 = Assert.Throws<ArgumentNullException>(() => new CountryInfoService(null, _worldBankClientMock.Object));
+            
             // Assert
-            Assert.IsNotNull(ex);
-            StringAssert.Contains("worldBankClient", ex.Message);
+            StringAssert.Contains("worldBankClient", ex1.Message);
+            StringAssert.Contains("countryCodeValidator", ex2.Message);
         }
 
         [Test]
@@ -38,7 +44,7 @@ namespace Business.Tests
 
             // Act
             // Assert
-            Assert.DoesNotThrow(() => new CountryInfoService(_worldBankClientMock.Object));
+            Assert.DoesNotThrow(() => new CountryInfoService(_countryCodeValidator, _worldBankClientMock.Object));
         }
 
         [TestCase(null)]
@@ -52,10 +58,9 @@ namespace Business.Tests
         public void GetCountryInfo_Throws_When_CountryCode_Is_Invalid(string countryCode)
         {
             // Arrange
-            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
 
             // Act
-            var ex = Assert.Throws<InvalidCountryCodeException>(() => countryInfoService.GetCountryInfo(countryCode));
+            var ex = Assert.Throws<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
 
             // Assert
             Assert.IsNotNull(ex);
@@ -66,10 +71,9 @@ namespace Business.Tests
         public void WorldBankClient_Fetches_CountryInfo_When_CountryCode_Is_Valid(string countryCode)
         {
             // Arrange
-            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
 
             // Act
-            countryInfoService.GetCountryInfo(countryCode);
+            _countryInfoService.GetCountryInfo(countryCode);
 
             // Assert
             _worldBankClientMock.Verify(x => x.GetCountryAsync(countryCode), Times.Once);
@@ -86,11 +90,9 @@ namespace Business.Tests
         public void WorldBankClient_DoesNot_Fetch_CountryInfo_When_CountryCode_Is_InValid(string countryCode)
         {
             // Arrange
-            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
-
             // Act
             // Assert
-            Assert.Throws<InvalidCountryCodeException>(() => countryInfoService.GetCountryInfo(countryCode));
+            Assert.Throws<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
             _worldBankClientMock.Verify(x => x.GetCountryAsync(countryCode), Times.Never);
         }
 
@@ -100,10 +102,8 @@ namespace Business.Tests
             // Arrange
             _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync((Country)null);
 
-            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
-
             // Act
-            var result = countryInfoService.GetCountryInfo("BR");
+            var result = _countryInfoService.GetCountryInfo("BR");
 
             // Assert
             Assert.IsNull(result);
@@ -120,10 +120,8 @@ namespace Business.Tests
 
             _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync(country);
 
-            var countryInfoService = new CountryInfoService(_worldBankClientMock.Object);
-
             // Act
-            var actualResult = countryInfoService.GetCountryInfo("BR");
+            var actualResult = _countryInfoService.GetCountryInfo("BR");
 
             // Assert
             Assert.IsNotNull(actualResult);

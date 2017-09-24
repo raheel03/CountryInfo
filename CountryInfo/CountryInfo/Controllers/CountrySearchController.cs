@@ -13,7 +13,10 @@ namespace CountryInfo.Controllers
         public CountrySearchController()
         {
             // TODO: Inject in the services
-            _countryInfoService = new CountryInfoService(new WorldBankClient());
+
+            _countryInfoService = new CountryInfoService(
+                new CountryCodeValidator(), 
+                new WorldBankClient());
         }
 
         public ActionResult Index()
@@ -29,19 +32,19 @@ namespace CountryInfo.Controllers
                 return View("Index", new CountrySearchModel());
             }
 
-            var searchModel = CountrySearchModel(countrySearchModel.Query);
+            var searchModel = SearchCountry(countrySearchModel.Query);
 
             return View("Index", searchModel);
         }
 
-        private CountrySearchModel CountrySearchModel(string searchQuery)
+        private CountrySearchModel SearchCountry(string countryCode)
         {
             Country searchResult = null;
             string errorMsg = null;
 
             try
             {
-                searchResult = _countryInfoService.GetCountryInfo(searchQuery);
+                searchResult = _countryInfoService.GetCountryInfo(countryCode);
             }
             catch (Exception e)
             {
@@ -50,7 +53,7 @@ namespace CountryInfo.Controllers
 
             var model = new CountrySearchModel
             {
-                Query = searchQuery,
+                Query = countryCode,
                 Result = searchResult,
                 ErrorMessage = errorMsg,
             };

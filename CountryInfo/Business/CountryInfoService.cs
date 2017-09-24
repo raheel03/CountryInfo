@@ -5,14 +5,15 @@ namespace Business
     public class CountryInfoService : ICountryInfoService
     {
         private readonly IWorldBankClient _worldBankClient;
-        private readonly CountryCodeValidator _countryCodeValidator;
+        private readonly ICountryCodeValidator _countryCodeValidator;
         
-        public CountryInfoService(IWorldBankClient worldBankClient)
+        public CountryInfoService(ICountryCodeValidator countryCodeValidator, IWorldBankClient worldBankClient)
         {
+            Ensure.IsNotNull(countryCodeValidator, nameof(countryCodeValidator));
             Ensure.IsNotNull(worldBankClient, nameof(worldBankClient));
 
+            _countryCodeValidator = countryCodeValidator;
             _worldBankClient = worldBankClient;
-            _countryCodeValidator = new CountryCodeValidator();
         }
 
         public Country GetCountryInfo(string countryCode)
