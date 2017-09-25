@@ -11,7 +11,7 @@ namespace Business.Tests
     [TestFixture]
     public class CountryInfoServiceTests
     {
-        private Mock<IWorldBankClient> _worldBankClientMock = new Mock<IWorldBankClient>();
+        private Mock<IWorldBankClient> _worldBankClientMock;
         private ICountryCodeValidator _countryCodeValidator;
         private ICountryInfoService _countryInfoService;
 

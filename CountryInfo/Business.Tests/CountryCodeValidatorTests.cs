@@ -5,7 +5,7 @@ namespace Business.Tests
 {
     public class CountryCodeValidatorTests
     {
-        private CountryCodeValidator _countryCodeValidator = new CountryCodeValidator();
+        private CountryCodeValidator _countryCodeValidator;
 
         [SetUp]
         public void Setup()
