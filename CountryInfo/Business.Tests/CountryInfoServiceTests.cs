@@ -3,6 +3,7 @@ using Business.Exception;
 using Business.Interface;
 using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 // ReSharper disable ObjectCreationAsStatement
 
 namespace Business.Tests
@@ -60,7 +61,7 @@ namespace Business.Tests
             // Arrange
 
             // Act
-            var ex = Assert.Throws<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
+            var ex = Assert.ThrowsAsync<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
 
             // Assert
             Assert.IsNotNull(ex);
@@ -92,7 +93,7 @@ namespace Business.Tests
             // Arrange
             // Act
             // Assert
-            Assert.Throws<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
+            Assert.ThrowsAsync<InvalidCountryCodeException>(() => _countryInfoService.GetCountryInfo(countryCode));
             _worldBankClientMock.Verify(x => x.GetCountryAsync(countryCode), Times.Never);
         }
 
@@ -103,14 +104,14 @@ namespace Business.Tests
             _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync((Country)null);
 
             // Act
-            var result = _countryInfoService.GetCountryInfo("BR");
+            var result = _countryInfoService.GetCountryInfo("BR").Result;
 
             // Assert
             Assert.IsNull(result);
         }
 
         [Test]
-        public void When_WorldBankClient_Fetches_A_Valid_Result_Then_A_Valid_Country_Is_Returned()
+        public async Task When_WorldBankClient_Fetches_A_ValidResult_Then_A_ValidCountry_Is_Returned()
         {
             // Arrange
             var country = new Country
@@ -121,11 +122,11 @@ namespace Business.Tests
             _worldBankClientMock.Setup(x => x.GetCountryAsync(It.IsAny<string>())).ReturnsAsync(country);
 
             // Act
-            var actualResult = _countryInfoService.GetCountryInfo("BR");
+            var actualResult = await _countryInfoService.GetCountryInfo("BR");
 
             // Assert
             Assert.IsNotNull(actualResult);
-            Assert.AreEqual(country.CountryName, actualResult.Result);
+            Assert.AreEqual(country.CountryName, actualResult.CountryName);
         }
     }
 }
