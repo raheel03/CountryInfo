@@ -1,4 +1,5 @@
 ﻿using Business.Interface;
+using System.Threading.Tasks;
 
 namespace Business
 {
@@ -6,7 +7,7 @@ namespace Business
     {
         private readonly IWorldBankClient _worldBankClient;
         private readonly ICountryCodeValidator _countryCodeValidator;
-        
+
         public CountryInfoService(ICountryCodeValidator countryCodeValidator, IWorldBankClient worldBankClient)
         {
             Ensure.IsNotNull(countryCodeValidator, nameof(countryCodeValidator));
@@ -16,11 +17,11 @@ namespace Business
             _worldBankClient = worldBankClient;
         }
 
-        public Country GetCountryInfo(string countryCode)
+        public async Task<Country> GetCountryInfo(string countryCode)
         {
             _countryCodeValidator.Validate(countryCode);
-            
-            var country = _worldBankClient.GetCountryAsync(countryCode).Result;
+
+            var country = await _worldBankClient.GetCountryAsync(countryCode);
             return country;
         }
     }

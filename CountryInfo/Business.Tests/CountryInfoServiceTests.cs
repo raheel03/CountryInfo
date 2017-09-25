@@ -125,7 +125,7 @@ namespace Business.Tests
 
             // Assert
             Assert.IsNotNull(actualResult);
-            Assert.AreEqual(country.CountryName, actualResult.CountryName);
+            Assert.AreEqual(country.CountryName, actualResult.Result);
         }
     }
 }

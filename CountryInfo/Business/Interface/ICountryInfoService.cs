@@ -1,7 +1,9 @@
-﻿namespace Business.Interface
+﻿using System.Threading.Tasks;
+
+namespace Business.Interface
 {
     public interface ICountryInfoService
     {
-        Country GetCountryInfo(string countryCode);
+       Task<Country> GetCountryInfo(string countryCode);
     }
 }

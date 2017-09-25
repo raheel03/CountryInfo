@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Business;
 using Business.Interface;
 using CountryInfo.Models;
+using System.Threading.Tasks;
 
 namespace CountryInfo.Controllers
 {
@@ -25,26 +26,26 @@ namespace CountryInfo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(CountrySearchModel countrySearchModel)
+        public async Task<ActionResult> Search(CountrySearchModel countrySearchModel)
         {
             if (!ModelState.IsValid)
             {
                 return View("Index", new CountrySearchModel());
             }
 
-            var searchModel = SearchCountry(countrySearchModel.Query);
+            var searchModel = await SearchCountry(countrySearchModel.Query);
 
             return View("Index", searchModel);
         }
 
-        private CountrySearchModel SearchCountry(string countryCode)
+        private async Task<CountrySearchModel> SearchCountry(string countryCode)
         {
             Country searchResult = null;
             string errorMsg = null;
 
             try
             {
-                searchResult = _countryInfoService.GetCountryInfo(countryCode);
+                searchResult = await _countryInfoService.GetCountryInfo(countryCode);
             }
             catch (Exception e)
             {

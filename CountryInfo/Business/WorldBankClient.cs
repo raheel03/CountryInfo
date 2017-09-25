@@ -27,14 +27,14 @@ namespace Business
         {
             string countryInfoUrl = $"{ApiCountriesEndpoint}/{countryCode}?{ApiResponseFormat}";
 
-            var response = Client.GetAsync(countryInfoUrl);
+            var response = await Client.GetAsync(countryInfoUrl);
 
-            if (!response.Result.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var responseToken = await response.Result.Content.ReadAsAsync<JToken>();
+            var responseToken = await response.Content.ReadAsAsync<JToken>();
             
             return ConvertToCountry(responseToken);
         }
